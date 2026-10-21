@@ -18,7 +18,16 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = express()
-app.use(cors())
+
+const corsOptions = {
+  origin: '*',
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 204,
+}
+
+app.use(cors(corsOptions))
+app.options('*', cors(corsOptions))
 app.use(express.json())
 app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')))
 
@@ -55,6 +64,6 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok' })
 })
 
-app.listen(PORT, () => {
-  console.log(`Team backend listening at http://localhost:${PORT}`)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Team backend listening at http://0.0.0.0:${PORT}`)
 })
